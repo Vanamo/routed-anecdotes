@@ -1,5 +1,4 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 const Menu = () => (
   <div>    
@@ -13,7 +12,7 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.content} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
     </ul>  
   </div>
 )
@@ -101,29 +100,37 @@ class App extends React.Component {
           author: 'Jez Humble',
           info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
           votes: 0,
+          id: 1
         },
         {
           content: 'Premature optimization is the root of all evil',
           author: 'Donald Knuth',
           info: 'http://wiki.c2.com/?PrematureOptimization',
-          votes: 0
+          votes: 0,
+          id: 2
         }
-      ]
+      ],
+      notification: ''
     } 
   }
 
   addNew = (anecdote) => {
-    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote)})
+    anecdote.id = (Math.random() * 10000).toFixed(0)
+    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) })
   }
 
-  vote = (anecdote) => {
+  anecdoteById = (id) =>
+    this.state.anecdotes.find(a => a.id === Number(id))
+
+  vote = (id) => {
+    const anecdote = this.anecdoteById(id)
+
     const voted = {
-        ...anecdote, 
+      ...anecdote,
       votes: anecdote.votes + 1
     }
 
-    const anecdotes = this.state.anecdotes
-      .map(a => a.content === anecdote.content ? voted : a )
+    const anecdotes = this.state.anecdotes.map(a => a.id === id ? voted : a)
 
     this.setState({ anecdotes })
   }
