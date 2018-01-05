@@ -1,8 +1,8 @@
 import React from 'react'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 const Menu = () => (
   <div>    
-    <a href='#'>home</a> &nbsp;
     <a href='#'>anecdotes</a>&nbsp;
     <a href='#'>create new</a>&nbsp;
     <a href='#'>about</a>&nbsp;
@@ -132,10 +132,10 @@ class App extends React.Component {
     return (
       <div>
         <h1>Software anecdotes</h1>
-        <Menu />
-        <AnecdoteList anecdotes={this.state.anecdotes} />
-        <About />      
-        <CreateNew addNew={this.addNew}/>
+          <Menu />
+          <AnecdoteList anecdotes={this.state.anecdotes} />
+          <About />      
+          <CreateNew addNew={this.addNew}/>
         <Footer />
       </div>
     );
