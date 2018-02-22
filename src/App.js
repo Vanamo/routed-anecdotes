@@ -1,10 +1,14 @@
 import React from 'react'
+import {
+  BrowserRouter as Router,
+  Route, Link, Redirect
+} from 'react-router-dom'
 
 const Menu = () => (
-  <div>    
-    <a href='#'>anecdotes</a>&nbsp;
-    <a href='#'>create new</a>&nbsp;
-    <a href='#'>about</a>&nbsp;
+  <div>
+    <Link to='/'>anecdotes</Link>&nbsp;
+    <Link to='/create'>create new</Link>&nbsp;
+    <Link to='/about'>about</Link>&nbsp;
   </div>
 )
 
@@ -13,7 +17,7 @@ const AnecdoteList = ({ anecdotes }) => (
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
-    </ul>  
+    </ul>
   </div>
 )
 
@@ -21,10 +25,10 @@ const About = () => (
   <div>
     <h2>About anecdote app</h2>
     <p>According to Wikipedia:</p>
-    
-    <em>An anecdote is a brief, revealing account of an individual person or an incident. 
-      Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself, 
-      such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative. 
+
+    <em>An anecdote is a brief, revealing account of an individual person or an incident.
+      Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
+      such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
       An anecdote is "a story with a point."</em>
 
     <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
@@ -35,7 +39,7 @@ const Footer = () => (
   <div>
     Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
 
-    See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code. 
+    See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code.
   </div>
 )
 
@@ -65,12 +69,12 @@ class CreateNew extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <h2>create a new anecdote</h2>
         <form onSubmit={this.handleSubmit}>
           <div>
-            content 
+            content
             <input name='content' value={this.state.content} onChange={this.handleChange} />
           </div>
           <div>
@@ -80,10 +84,10 @@ class CreateNew extends React.Component {
           <div>
             url for more info
             <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div> 
+          </div>
           <button>create</button>
         </form>
-      </div>  
+      </div>
     )
 
   }
@@ -111,7 +115,7 @@ class App extends React.Component {
         }
       ],
       notification: ''
-    } 
+    }
   }
 
   addNew = (anecdote) => {
@@ -138,14 +142,25 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Software anecdotes</h1>
-          <Menu />
-          <AnecdoteList anecdotes={this.state.anecdotes} />
-          <About />      
-          <CreateNew addNew={this.addNew}/>
-        <Footer />
+        <div>
+          <h1>Software anecdotes</h1>
+        </div>
+
+        < Router >
+          <div>
+            <Menu />
+            <Route exact path="/" render={() =>
+              <AnecdoteList anecdotes={this.state.anecdotes} />} />
+            <Route exact path="/create" render={() =>
+              <CreateNew addNew={this.addNew} />} />
+            <Route exact path="/about" render={() => <About />} />
+          </div>
+        </Router >
+        <div>
+          <Footer />
+        </div>
       </div>
-    );
+    )
   }
 }
 
