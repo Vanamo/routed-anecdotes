@@ -1,16 +1,32 @@
 import React from 'react'
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect
+  Route, Link, NavLink, Redirect
 } from 'react-router-dom'
 
 const Menu = () => (
-  <div>
-    <Link to='/'>anecdotes</Link>&nbsp;
-    <Link to='/create'>create new</Link>&nbsp;
-    <Link to='/about'>about</Link>&nbsp;
+  <div style={navBar}>
+    <NavLink exact 
+      to='/'      
+      activeStyle={selected}>anecdotes</NavLink>&nbsp;
+    <NavLink exact 
+      to='/create'
+      activeStyle={selected}>create new</NavLink>&nbsp;
+    <NavLink exact 
+      to='/about'
+      activeStyle={selected}>about</NavLink>&nbsp;
   </div>
 )
+
+const selected = {
+  color: 'black',
+  textDecoration: 'none',
+}
+
+const navBar = {
+  backgroundColor: 'lightgrey',
+  padding: 8
+}
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
@@ -64,10 +80,20 @@ const Notification = ({message}) => {
       return null
   }
   return (
-      <div className='success'>
+      <div style={success}>
           {message}
       </div>
   )
+}
+
+const success = {
+  color: 'green',
+  fontSize: 17,
+  border: 2,
+  borderStyle: 'solid',
+  borderColor: 'green',
+  padding: 8,
+  marginBottom: 20
 }
 
 class CreateNew extends React.Component {
@@ -147,7 +173,7 @@ class App extends React.Component {
           id: '2'
         }
       ],
-      notification: ''
+      notification: null
     }
   }
 
@@ -159,7 +185,7 @@ class App extends React.Component {
     })
     setTimeout(() => {
       this.setState({
-        notification: ''
+        notification: null
       })
     }, 10000)
   }
