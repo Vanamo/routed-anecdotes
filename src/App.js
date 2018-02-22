@@ -98,7 +98,7 @@ class CreateNew extends React.Component {
       author: '',
       info: ''
     })
-    history.push('/')
+    this.props.history.push('/')
   }
 
   render() {
@@ -195,8 +195,8 @@ class App extends React.Component {
 
             <Route exact path="/" render={() =>
               <AnecdoteList anecdotes={this.state.anecdotes} />} />
-            <Route exact path="/create" render={() =>
-              <CreateNew addNew={this.addNew} />} />
+            <Route exact path="/create" render={({history}) =>
+              <CreateNew addNew={this.addNew} history={history} />} />
             <Route exact path="/about" render={() => <About />} />
             <Route exact path="/anecdotes/:id" render={({match}) =>
               <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
