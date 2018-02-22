@@ -3,41 +3,44 @@ import {
   BrowserRouter as Router,
   Route, Link, NavLink, Redirect
 } from 'react-router-dom'
+import {
+  Container,
+  Table, Form, Button,
+  Message, Menu, Grid, Image
+} from 'semantic-ui-react'
 
-const Menu = () => (
-  <div style={navBar}>
-    <NavLink exact 
-      to='/'      
-      activeStyle={selected}>anecdotes</NavLink>&nbsp;
-    <NavLink exact 
-      to='/create'
-      activeStyle={selected}>create new</NavLink>&nbsp;
-    <NavLink exact 
-      to='/about'
-      activeStyle={selected}>about</NavLink>&nbsp;
-  </div>
+const NavigationMenu = () => (
+  <Menu inverted>
+    <Menu.Item link>
+      <NavLink exact to='/' activeStyle={linkStyle}>anecdotes</NavLink>
+    </Menu.Item>
+    <Menu.Item link>
+      <NavLink exact to='/create' activeStyle={linkStyle}>create new</NavLink>
+    </Menu.Item>
+    <Menu.Item>
+      <NavLink exact to='/about' activeStyle={linkStyle}>about</NavLink>
+    </Menu.Item>
+  </Menu>
 )
 
-const selected = {
-  color: 'black',
-  textDecoration: 'none',
-}
-
-const navBar = {
-  backgroundColor: 'lightgrey',
-  padding: 8
+const linkStyle = {
+  fontStyle: 'italic'
 }
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(a => 
-        <li key={a.id}>
-          <Link to={`/anecdotes/${a.id}`}>{a.content}</Link>
-        </li>
-      )}
-    </ul>
+    <Table striped celled>
+      <Table.Body>
+        {anecdotes.map(a =>
+          <Table.Row key={a.id}>
+            <Table.Cell>
+              <Link to={`/anecdotes/${a.id}`}>{a.content}</Link>
+            </Table.Cell>
+          </Table.Row>
+        )}
+      </Table.Body>
+    </Table>
   </div>
 )
 
@@ -54,135 +57,147 @@ const Anecdote = ({ anecdote }) => (
 )
 
 const About = () => (
-  <div>
-    <h2>About anecdote app</h2>
-    <p>According to Wikipedia:</p>
+  <Grid>
+    <Grid.Row>
+      <Grid.Column width={16}>
+        <h2>About anecdote app</h2>
+      </Grid.Column>
+    </Grid.Row>
 
-    <em>An anecdote is a brief, revealing account of an individual person or an incident.
-      Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
-      such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
-      An anecdote is "a story with a point."</em>
+    <Grid.Row>
+      <Grid.Column width={8}>
+        <p>According to Wikipedia:</p>
 
-    <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
-  </div>
+        <em>An anecdote is a brief, revealing account of an individual person or an incident.
+          Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
+          such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
+        An anecdote is "a story with a point."</em>
+        <p></p>
+        <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
+      </Grid.Column>
+      <Grid.Column width={8}>
+        <Image src='https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg'
+          style={imageStyle} />
+      </Grid.Column>
+    </Grid.Row>
+  </Grid>
 )
-
-const Footer = () => (
-  <div>
-    Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
-
+    
+const imageStyle = {
+      width: 180,
+    height: 240
+  }
+  
+  const Footer = () => (
+  <div style={footerStyle}>
+      Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
+  
     See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code.
   </div>
-)
-
+    )
+    
+const footerStyle = {
+      paddingTop: 20
+  }
+  
 const Notification = ({message}) => {
   if (message === null) {
       return null
+}
+return (
+      <Message success>
+      {message}
+    </Message>
+    )
   }
-  return (
-      <div style={success}>
-          {message}
-      </div>
-  )
-}
-
-const success = {
-  color: 'green',
-  fontSize: 17,
-  border: 2,
-  borderStyle: 'solid',
-  borderColor: 'green',
-  padding: 8,
-  marginBottom: 20
-}
-
+  
 class CreateNew extends React.Component {
-  constructor() {
+      constructor() {
     super()
     this.state = {
       content: '',
-      author: '',
-      info: ''
-    }
+    author: '',
+    info: ''
   }
+}
 
   handleChange = (e) => {
-    console.log(e.target.name, e.target.value)
-    this.setState({ [e.target.name]: e.target.value })
+      console.log(e.target.name, e.target.value)
+    this.setState({[e.target.name]: e.target.value })
   }
 
   handleSubmit = (e) => {
-    e.preventDefault()
+      e.preventDefault()
     this.props.addNew({
       content: this.state.content,
-      author: this.state.author,
-      info: this.state.info,
-      votes: 0
-    })
+    author: this.state.author,
+    info: this.state.info,
+    votes: 0
+  })
     this.setState({
       content: '',
-      author: '',
-      info: ''
-    })
-    this.props.history.push('/')
-  }
+    author: '',
+    info: ''
+  })
+  this.props.history.push('/')
+}
 
   render() {
     return (
       <div>
-        <h2>create a new anecdote</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            content
-            <input name='content' value={this.state.content} onChange={this.handleChange} />
-          </div>
-          <div>
-            author
-            <input name='author' value={this.state.author} onChange={this.handleChange} />
-          </div>
-          <div>
-            url for more info
-            <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div>
-          <button>create</button>
-        </form>
-      </div>
+      <h2>create a new anecdote</h2>
+      <Form onSubmit={this.handleSubmit}>
+        <Form.Field>
+          <label>content</label>
+          <input name='content' value={this.state.content} onChange={this.handleChange} />
+        </Form.Field>
+        <Form.Field>
+          <label>author</label>
+          <input name='author' value={this.state.author} onChange={this.handleChange} />
+        </Form.Field>
+        <Form.Field>
+          <label>url for more info</label>
+          <input name='info' value={this.state.info} onChange={this.handleChange} />
+        </Form.Field>
+        <Button type='submit'>create</Button>
+      </Form>
+    </div>
     )
 
   }
 }
 
 class App extends React.Component {
-  constructor() {
+      constructor() {
     super()
 
     this.state = {
       anecdotes: [
         {
-          content: 'If it hurts, do it more often',
-          author: 'Jez Humble',
-          info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-          votes: 0,
-          id: '1'
-        },
+      content: 'If it hurts, do it more often',
+    author: 'Jez Humble',
+    info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
+    votes: 0,
+    id: '1'
+  },
         {
-          content: 'Premature optimization is the root of all evil',
-          author: 'Donald Knuth',
-          info: 'http://wiki.c2.com/?PrematureOptimization',
-          votes: 0,
-          id: '2'
-        }
-      ],
-      notification: null
-    }
+      content: 'Premature optimization is the root of all evil',
+    author: 'Donald Knuth',
+    info: 'http://wiki.c2.com/?PrematureOptimization',
+    votes: 0,
+    id: '2'
   }
+],
+notification: null
+}
+}
 
   addNew = (anecdote) => {
-    anecdote.id = (Math.random() * 10000).toFixed(0)
+      anecdote.id = (Math.random() * 10000).toFixed(0)
     this.setState({
       anecdotes: this.state.anecdotes.concat(anecdote),
-      notification: `a new anecdote '${anecdote.content}' created`      
-    })
+      notification: `a new anecdote '${anecdote.content}' created`
+  })
     setTimeout(() => {
       this.setState({
         notification: null
@@ -198,16 +213,17 @@ class App extends React.Component {
 
     const voted = {
       ...anecdote,
-      votes: anecdote.votes + 1
-    }
+    votes: anecdote.votes + 1
+  }
 
-    const anecdotes = this.state.anecdotes.map(a => a.id === id ? voted : a)
+  const anecdotes = this.state.anecdotes.map(a => a.id === id ? voted : a)
 
-    this.setState({ anecdotes })
+    this.setState({anecdotes})
   }
 
   render() {
     return (
+      <Container>
       <div>
         <div>
           <h1>Software anecdotes</h1>
@@ -215,16 +231,16 @@ class App extends React.Component {
 
         < Router >
           <div>
-            <Menu />
+            <NavigationMenu />
             <p></p>
             <Notification message={this.state.notification} />
 
             <Route exact path="/" render={() =>
               <AnecdoteList anecdotes={this.state.anecdotes} />} />
-            <Route exact path="/create" render={({history}) =>
+            <Route exact path="/create" render={({ history }) =>
               <CreateNew addNew={this.addNew} history={history} />} />
             <Route exact path="/about" render={() => <About />} />
-            <Route exact path="/anecdotes/:id" render={({match}) =>
+            <Route exact path="/anecdotes/:id" render={({ match }) =>
               <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
             />
           </div>
@@ -233,6 +249,7 @@ class App extends React.Component {
           <Footer />
         </div>
       </div>
+    </Container>
     )
   }
 }
